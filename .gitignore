@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# YOLO model weights (large binary files)
+*.pt
+*.onnx
+*.engine
+*.tflite
+model/
+
+# Environment variables
+.env
+.env.*
+
+# Flask
+instance/
+flask_session/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Logs & temp
+*.log
+runs/
+
+# Dataset
+dataset/
+
+# Exclude the original test repo
+Test_for_CS2/
+AGENTS.md
