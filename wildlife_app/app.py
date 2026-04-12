@@ -11,12 +11,27 @@ def index():
 @app.route("/detect", methods=["POST"])
 def detect():
     try:
-        body = request.json
-        if not body or "image" not in body:
-            return jsonify({"error": "No image field in request"}), 400
+        # Check if the request is multipart/form-data (file upload)
+        if 'image' in request.files:
+            file = request.files['image']
+            if file.filename == '':
+                return jsonify({"error": "No selected file"}), 400
+            
+            # Read file bytes and convert to base64 string for the detector
+            img_bytes = file.read()
+            import base64
+            data_url = f"data:image/jpeg;base64,{base64.b64encode(img_bytes).decode('utf-8')}"
+        
+        # Fallback to JSON body (for backward compatibility or testing)
+        elif request.is_json:
+            body = request.json
+            if not body or "image" not in body:
+                return jsonify({"error": "No image field in request"}), 400
+            data_url = body["image"]
+        else:
+            return jsonify({"error": "Invalid request format. Use file upload or JSON."}), 400
 
-        data = body["image"]
-        result = detector.process_frame(data)
+        result = detector.process_frame(data_url)
         return jsonify({"image": result})
     except Exception as e:
         return jsonify({"error": str(e)}), 500

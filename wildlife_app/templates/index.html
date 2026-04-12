@@ -23,14 +23,12 @@
       letter-spacing: 1px;
       text-transform: uppercase;
     }
-    video, #result {
+    #result {
       width: 100%;
       max-width: 640px;
       border-radius: 10px;
       background: #222;
       display: block;
-    }
-    #result {
       margin-top: 16px;
       min-height: 40px;
     }
@@ -55,59 +53,52 @@
       font-size: 0.85rem;
       color: #888;
     }
-    canvas { display: none; }
   </style>
 </head>
 <body>
   <h2>Wildlife Detection</h2>
-  <video id="vid" autoplay muted playsinline></video>
-  <button id="btn" onclick="capture()">Capture & Detect</button>
-  <p id="status">Waiting for camera...</p>
-  <canvas id="canvas"></canvas>
+  <input type="file" id="fileInput" accept="image/*" style="margin-top: 20px; color: #aaa;">
+  <button id="uploadBtn" onclick="uploadFile()" style="margin-top: 10px;">Upload & Detect</button>
+  <p id="status"></p>
   <img id="result" />
+
   <script>
-    const video = document.getElementById("vid");
-    const canvas = document.getElementById("canvas");
     const result = document.getElementById("result");
-    const btn = document.getElementById("btn");
+    const fileInput = document.getElementById("fileInput");
+    const uploadBtn = document.getElementById("uploadBtn");
     const status = document.getElementById("status");
 
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment", width: 1920, height: 1080 } })
-      .then(stream => {
-        video.srcObject = stream;
-        status.textContent = "Camera ready";
-      })
-      .catch(err => {
-        status.textContent = "Camera error: " + err.message;
-      });
+    function uploadFile() {
+      const file = fileInput.files[0];
+      if (!file) {
+        if (status) status.textContent = "Please select a file first.";
+        return;
+      }
 
-    function capture() {
-      btn.disabled = true;
-      btn.textContent = "Processing...";
-      status.textContent = "Running detection...";
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext("2d").drawImage(video, 0, 0);
+      if (uploadBtn) uploadBtn.disabled = true;
+      if (status) status.textContent = "Uploading...";
+
+      const formData = new FormData();
+      formData.append("image", file);
+
       fetch("/detect", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: canvas.toDataURL("image/jpeg", 0.8) })
+        body: formData
       })
       .then(r => r.json())
       .then(data => {
         if (data.error) {
-          status.textContent = "Error: " + data.error;
+          if (status) status.textContent = "Error: " + data.error;
         } else {
           result.src = data.image;
-          status.textContent = "Done!";
+          if (status) status.textContent = "Done!";
         }
       })
       .catch(err => {
-        status.textContent = "Request failed: " + err.message;
+        if (status) status.textContent = "Request failed: " + err.message;
       })
       .finally(() => {
-        btn.disabled = false;
-        btn.textContent = "Capture & Detect";
+        if (uploadBtn) uploadBtn.disabled = false;
       });
     }
   </script>
