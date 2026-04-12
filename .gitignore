@@ -14,7 +14,7 @@ venv/
 env/
 
 # YOLO model weights (large binary files)
-*.pt
+
 *.onnx
 *.engine
 *.tflite
@@ -47,3 +47,4 @@ dataset/
 # Exclude the original test repo
 Test_for_CS2/
 AGENTS.md
+session-ses_27dd.md
