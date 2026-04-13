@@ -56,14 +56,25 @@
   </style>
 </head>
 <body>
-  <h2>Wildlife Detection</h2>
+  <h2 style="margin-top: 20px;">Wildlife Detection</h2>
   <input type="file" id="fileInput" accept="image/*" style="margin-top: 20px; color: #aaa;">
   <button id="uploadBtn" onclick="uploadFile()" style="margin-top: 10px;">Upload & Detect</button>
   <p id="status"></p>
-  <img id="result" />
+  
+  <div id="comparison-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; max-width: 1280px; margin-top: 20px;">
+    <div style="text-align: center;">
+      <p style="color: #888; font-size: 0.8rem; margin-bottom: 5px;">Detection</p>
+      <img id="result" style="width: 100%; max-width: 600px; border-radius: 10px; background: #222;" />
+    </div>
+    <div style="text-align: center;">
+      <p style="color: #888; font-size: 0.8rem; margin-bottom: 5px;">Depth Map</p>
+      <img id="depthResult" style="width: 100%; max-width: 600px; border-radius: 10px; background: #222;" />
+    </div>
+  </div>
 
   <script>
     const result = document.getElementById("result");
+    const depthResult = document.getElementById("depthResult");
     const fileInput = document.getElementById("fileInput");
     const uploadBtn = document.getElementById("uploadBtn");
     const status = document.getElementById("status");
@@ -90,7 +101,8 @@
         if (data.error) {
           if (status) status.textContent = "Error: " + data.error;
         } else {
-          result.src = data.image;
+          result.src = data.annotated_image;
+          depthResult.src = data.depth_map;
           if (status) status.textContent = "Done!";
         }
       })

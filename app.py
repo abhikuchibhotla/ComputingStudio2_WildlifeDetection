@@ -32,7 +32,10 @@ def detect():
             return jsonify({"error": "Invalid request format. Use file upload or JSON."}), 400
 
         result = detector.process_frame(data_url)
-        return jsonify({"image": result})
+        return jsonify({
+            "annotated_image": result["annotated_image"],
+            "depth_map": result["depth_map"]
+        })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
