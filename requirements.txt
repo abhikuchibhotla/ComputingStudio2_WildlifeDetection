@@ -9,4 +9,3 @@ einops
 gradio
 gradio_imageslider
 matplotlib
-xformers
