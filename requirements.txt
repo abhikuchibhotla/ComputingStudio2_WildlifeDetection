@@ -3,5 +3,10 @@ ultralytics
 opencv-python
 numpy
 torch
+torchvision
 timm
 einops
+gradio
+gradio_imageslider
+matplotlib
+xformers
