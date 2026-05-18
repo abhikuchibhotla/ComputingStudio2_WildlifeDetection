@@ -5,6 +5,16 @@
 
 A Streamlit research demo that pits a custom wildlife-aware ADAS pipeline against a stock **Alpamayo-1.5-10B** multimodal baseline on identical road images. Built to show that a composed pipeline — specialist detector + monocular depth + VLM reasoning — outperforms a general-purpose driving VLM on Australian wildlife hazard detection.
 
+These models may be difficult to run on lower-memory consumer GPUs.
+
+If the full local stack cannot run on your hardware, the following components may be replaced with:
+
+- Hugging Face-hosted inference endpoints
+
+- smaller quantised local models
+
+- alternative multimodal reasoning models
+
 ---
 
 ## Pipeline
